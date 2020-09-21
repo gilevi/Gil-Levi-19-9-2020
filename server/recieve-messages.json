@@ -1,0 +1,2 @@
+[{"id":1,"sender":"Ofek","receiver":"Gil","message":"Hey, we have a meeting in 12:00 ","subject":"Meeting","creationDate":"September 14, 2020 03:54:00"},
+    {"id":2,"sender":"Moshe","receiver":"Gil","message":"Hey ","subject":"Update version","creationDate":"September 17, 2020 09:54:00"},{"id":3,"sender":"Shay","receiver":"Gil","message":"Hey, we have a meeting in 17:00 ","subject":"Meeting","creationDate":"September 19, 2020 03:54:00"}]
