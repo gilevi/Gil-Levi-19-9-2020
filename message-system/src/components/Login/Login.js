@@ -71,7 +71,7 @@ export default function Login() {
 
     setMessage("");
     setLoading(true);
-    fetch('http://localhost:9000/users/login', {
+    fetch('http://167.172.162.59:9000/users/login', {
         method: 'POST',
         headers:  new Headers ({
             'Content-Type': 'application/x-www-form-urlencoded',

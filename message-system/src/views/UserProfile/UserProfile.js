@@ -68,7 +68,7 @@ export default function UserProfile() {
   // Post method after validation form
   const onSubmit = (data) => {
     console.log(data);
-    fetch('http://localhost:9000/send-message', {
+    fetch('http://167.172.162.59:9000/send-message', {
       method: 'POST',
       headers:  new Headers ({
           'Content-Type': 'application/x-www-form-urlencoded',

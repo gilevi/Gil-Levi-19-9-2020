@@ -22,7 +22,7 @@ class SentMessages extends Component {
     
     componentDidMount() {
         var lists = [];
-        fetch("http://localhost:9000/messages-sent")
+        fetch("http://167.172.162.59:9000/messages-sent")
         .then(res =>res.text())
         .then(res => this.setState({apiResponse: JSON.parse(res)}));
     }
@@ -30,7 +30,7 @@ class SentMessages extends Component {
       event.preventDefault();
       console.log(event.currentTarget.id);
       var id = parseInt(event.currentTarget.id);
-      fetch('http://localhost:9000/delete-message-s/:'+id, {
+      fetch('http://167.172.162.59:9000/delete-message-s/:'+id, {
         method: 'DELETE',
       });
       window.location.reload();

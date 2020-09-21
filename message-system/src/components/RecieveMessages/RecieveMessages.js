@@ -21,7 +21,7 @@ class RecieveMessages extends Component {
 
     componentDidMount() {
         var lists = [];
-        fetch("http://localhost:9000/messages-receive")
+        fetch("http://167.172.162.59:9000/messages-receive")
         .then(res =>res.text())
         .then(res => this.setState({apiResponse: JSON.parse(res)}));
     }
@@ -29,7 +29,7 @@ class RecieveMessages extends Component {
       event.preventDefault();
       console.log(event.currentTarget.id);
       var id = parseInt(event.currentTarget.id);
-      fetch('http://localhost:9000/delete-message/:'+id, {
+      fetch('http://167.172.162.59:9000/delete-message/:'+id, {
         method: 'DELETE',
       }).then(console.log(id));
       window.location.reload();
