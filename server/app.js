@@ -28,10 +28,6 @@ app.use(bodyParser.urlencoded({
 }));
 
 
-//app.delete = delete message
-
-//message object = { sender, receiver, message, subject, creation date }
-
 app.get('/messages-receive', function(req,res){
 
     let mails = fs.readFileSync('recieve-messages.json');
@@ -117,10 +113,8 @@ app.post('/users/login', function(req,res){
     data = Object.keys(data);
     var new_data = data.toString();
     new_data = JSON.parse(new_data);
-    console.log(new_data);
     let users = fs.readFileSync('users.json');
     let check_users = JSON.parse(users);
-    console.log(check_users)
     for( var i=0; i<check_users.length; i++){
             if(new_data['user'] == check_users[i]['user'] 
             && new_data['password'] == check_users[i]['password']){
