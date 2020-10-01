@@ -10,6 +10,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { Route, Redirect } from 'react-router';
 
+import { connect } from 'react-redux';
+import { LoginInto } from '../../actions';
 
 const redirect = false;
 const useStyles = makeStyles((theme) => ({
@@ -43,7 +45,7 @@ const required = (value) => {
   };
 
 
-export default function Login() {
+function Login(props) {
   const classes = useStyles();
   const form = useRef();
   const checkBtn = useRef();
@@ -71,31 +73,13 @@ export default function Login() {
 
     setMessage("");
     setLoading(true);
-    fetch('http://167.172.162.59:9000/users/login', {
-        method: 'POST',
-        headers:  new Headers ({
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Accept': 'application/json, text/plain, */*'
-        }),
-        body: JSON.stringify({ user: username, password: password})
-        }).then(data => {
-            console.log('Success:', data.status);
-            if(data.status === 201){
-                setLogin(true);
-                var isLogin = JSON.parse("true".toLowerCase());
-                sessionStorage.setItem('login', isLogin); 
-
-            }
-            else{
-                setLogin(false);
-                var isLogin = JSON.parse("true".toLowerCase());
-                sessionStorage.setItem('login', false); 
-            }
-          })
-          
+    var data = JSON.stringify({ "user": username, "password": password});
+    const l = props.LoginInto(data).then(d => {
+                  setLogin(d.payload);
+  
+            })
 
   };
-
 
   return (
     <Container component="main" maxWidth="xs">
@@ -147,7 +131,7 @@ export default function Login() {
             Login
           </Button>
           {login ? <Redirect to="/admin/recieve-messages" /> : null}
-          { login === false ? <div>Something wrong, try again</div>: null}
+          {login === false ? <div>Something wrong, try again</div>: null}
           
             
         </form>
@@ -157,3 +141,5 @@ export default function Login() {
     </Container>
   );
 }
+
+export default connect (null ,{LoginInto})(Login)

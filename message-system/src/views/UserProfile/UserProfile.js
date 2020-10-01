@@ -69,10 +69,12 @@ function UserProfile(props) {
 
   // Post method after validation form
   const onSubmit = (data) => {
+    console.log(typeof(data))
     props.addMessage(data);
     setOpen(true);
     document.getElementById("form").reset();
   };
+
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
