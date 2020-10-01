@@ -12,6 +12,8 @@ import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 
+import { connect } from 'react-redux';
+import { addMessage } from '../../actions';
 
 const styles = {
   cardCategoryWhite: {
@@ -53,7 +55,7 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
   
-export default function UserProfile() {
+function UserProfile(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -67,15 +69,7 @@ export default function UserProfile() {
 
   // Post method after validation form
   const onSubmit = (data) => {
-    console.log(data);
-    fetch('http://167.172.162.59:9000/send-message', {
-      method: 'POST',
-      headers:  new Headers ({
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Accept': 'application/json, text/plain, */*'
-      }),
-      body:  JSON.stringify({ data:data})
-  });
+    props.addMessage(data);
     setOpen(true);
     document.getElementById("form").reset();
   };
@@ -193,3 +187,4 @@ export default function UserProfile() {
 }
 
 
+export default connect (null ,{addMessage})(UserProfile)

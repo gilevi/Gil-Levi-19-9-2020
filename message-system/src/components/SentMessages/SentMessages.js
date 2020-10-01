@@ -9,8 +9,41 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 
-import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
+import { connect } from 'react-redux';
+import { fetchSentMessages, deleteMessagesSent } from '../../actions';
 
+
+// import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
+
+const styles = {
+  cardCategoryWhite: {
+    "&,& a,& a:hover,& a:focus": {
+      color: "rgba(255,255,255,.62)",
+      margin: "0",
+      fontSize: "14px",
+      marginTop: "0",
+      marginBottom: "0"
+    },
+    "& a,& a:hover,& a:focus": {
+      color: "#FFFFFF"
+    }
+  },
+  cardTitleWhite: {
+    color: "#FFFFFF",
+    marginTop: "0px",
+    minHeight: "auto",
+    fontWeight: "300",
+    fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+    marginBottom: "3px",
+    textDecoration: "none",
+    "& small": {
+      color: "#777",
+      fontSize: "65%",
+      fontWeight: "400",
+      lineHeight: "1"
+    }
+  }
+};
 const useStyles = makeStyles(styles);
 
 class SentMessages extends Component {
@@ -21,28 +54,25 @@ class SentMessages extends Component {
 
     
     componentDidMount() {
-        var lists = [];
-        fetch("http://167.172.162.59:9000/messages-sent")
-        .then(res =>res.text())
-        .then(res => this.setState({apiResponse: JSON.parse(res)}));
+        this.props.fetchSentMessages();
+       
     }
     onClick = (event)=> {
       event.preventDefault();
-      console.log(event.currentTarget.id);
       var id = parseInt(event.currentTarget.id);
-      fetch('http://167.172.162.59:9000/delete-message-s/:'+id, {
-        method: 'DELETE',
-      });
+      console.log(id);
+      this.props.deleteMessagesSent(id);
       window.location.reload();
 
   }
 
     render() {
-
+        
         const classes = this.props;
         var lists = [];
-        for(var i=0; i<this.state.apiResponse.length; i++){
-            lists[i] = [this.state.apiResponse[i]['id'],this.state.apiResponse[i]['receiver'], this.state.apiResponse[i]['subject'], this.state.apiResponse[i]['message'],this.state.apiResponse[i]['creationDate'],( <Button color="primary" id={this.state.apiResponse[i]['id']} onClick={(event) => this.onClick(event)}>
+        for(var i=0; i<this.props.sent_messages.length; i++){
+            lists[i] = [this.props.sent_messages[i]['id'],this.props.sent_messages[i]['receiver'], this.props.sent_messages[i]['subject'], this.props.sent_messages[i]['message'],this.props.sent_messages[i]['creationDate'],
+            ( <Button color="primary" id={this.props.sent_messages[i]['id']} onClick={(event) => this.onClick(event)}>
             Remove
           </Button>) ];
         }
@@ -76,4 +106,8 @@ class SentMessages extends Component {
   );
 }
 }
-export default SentMessages;
+const mapStateToProps = (state) => {
+  return { sent_messages: state.sent_messages }
+
+}
+export default connect (mapStateToProps, {fetchSentMessages, deleteMessagesSent})(SentMessages);

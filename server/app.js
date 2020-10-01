@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 
 app.get('/', function(req,res){
 
-    res.send('hello world');
+    res.send('The server is up and runing');
 })
 
 app.use(bodyParser.urlencoded({

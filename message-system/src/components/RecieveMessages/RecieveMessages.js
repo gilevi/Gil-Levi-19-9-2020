@@ -9,52 +9,79 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 
-import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
+import { connect } from 'react-redux';
+import { fetchMessages, deleteMessages } from '../../actions';
 
+// import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
+
+const styles = {
+  cardCategoryWhite: {
+    "&,& a,& a:hover,& a:focus": {
+      color: "rgba(255,255,255,.62)",
+      margin: "0",
+      fontSize: "14px",
+      marginTop: "0",
+      marginBottom: "0"
+    },
+    "& a,& a:hover,& a:focus": {
+      color: "#FFFFFF"
+    }
+  },
+  cardTitleWhite: {
+    color: "#FFFFFF",
+    marginTop: "0px",
+    minHeight: "auto",
+    fontWeight: "300",
+    fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+    marginBottom: "3px",
+    textDecoration: "none",
+    "& small": {
+      color: "#777",
+      fontSize: "65%",
+      fontWeight: "400",
+      lineHeight: "1"
+    }
+  }
+};
 const useStyles = makeStyles(styles);
+
 
 class RecieveMessages extends Component {
     constructor(props) {
       super(props);
-      this.state = {apiResponse:"", id: null, click:false};
+      this.state = {click:false};
     }    
 
     componentDidMount() {
-        var lists = [];
-        fetch("http://167.172.162.59:9000/messages-receive")
-        .then(res =>res.text())
-        .then(res => this.setState({apiResponse: JSON.parse(res)}));
+        this.props.fetchMessages();
     }
     onClick = (event)=> {
       event.preventDefault();
-      console.log(event.currentTarget.id);
       var id = parseInt(event.currentTarget.id);
-      fetch('http://167.172.162.59:9000/delete-message/:'+id, {
-        method: 'DELETE',
-      }).then(console.log(id));
+      this.props.deleteMessages(id);
       window.location.reload();
 
   }
+   
     render() {
 
-      
+        console.log(this.props.messages);
         const classes = this.props;
         var lists = [];
-        for(var i=0; i<this.state.apiResponse.length; i++){
-            var id = this.state.apiResponse[i];
-            lists[i] = [this.state.apiResponse[i]['id'],this.state.apiResponse[i]['sender'], this.state.apiResponse[i]['subject'], this.state.apiResponse[i]['message'],this.state.apiResponse[i]['creationDate'], ( <Button color="primary" id={this.state.apiResponse[i]['id']} onClick={(event) => this.onClick(event)}>
-            Remove
-          </Button>) ];
-         
+        for(var i=0; i<this.props.messages.length; i++){
+          var id = this.props.messages[i];
+          lists[i] = [this.props.messages[i]['id'],this.props.messages[i]['sender'], this.props.messages[i]['subject'], this.props.messages[i]['message'],this.props.messages[i]['creationDate'], 
+          ( <Button color="primary" id={this.props.messages[i]['id']} onClick={(event) => this.onClick(event)}>
+          Remove
+        </Button>) ];
         }
 
         
         return (
   
       <div>
-     
+
       <GridContainer>
-      
         <GridItem xs={24} sm={24} md={12}>
           <Card>
             <CardHeader color="warning">
@@ -77,7 +104,12 @@ class RecieveMessages extends Component {
 }
 }
 
-export default RecieveMessages;
+const mapStateToProps = (state) => {
+    return { messages: state.messages }
+  
+}
+
+export default connect (mapStateToProps, {fetchMessages, deleteMessages})(RecieveMessages);
 
 
 
